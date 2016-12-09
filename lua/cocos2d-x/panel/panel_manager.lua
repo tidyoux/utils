@@ -9,12 +9,19 @@ local makePanelKey = function(folder, panelName)
 	return folder .. "-" .. panelName
 end
 
-panel_manager.createByConf = function(tPanelConf, ...)
+panel_manager.createByConf = function(panelConfPath, ...)
+	local tPanelConf = require("config.panel." .. panelConfPath)
+	if type(tPanelConf) ~= "table" then
+		printError("%s, createByConf, invalid panelConfPath: %s", TAG, tostring(panelConfPath))
+		return nil
+	end
+
 	local Panel = class(tPanelConf.name,
 		function(...)
 			return tPanelConf.super.new(...)
 		end)
 	local p = Panel.new(...)
+	p:setName(tPanelConf.name)
 	p:initByConf(tPanelConf)
 	safelyCall(tPanelConf.init, p)
 	return p

@@ -22,6 +22,14 @@ function base_component:getCustomComponent(key)
 	return self.m_context:getCustomComponent(key)
 end
 
+function base_component:addTobeReleasedRes(tUi, tAnim, tImg)
+	self.m_context:addTobeReleasedRes(tUi, tAnim, tImg)
+end
+
+function base_component:loadImageAsync(imgName, callback)
+	self.m_context:loadImageAsync(imgName, callback)
+end
+
 function base_component:getMsgRequester()
 	return ui_helper.getTemporaryMsgRequester()
 end

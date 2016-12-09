@@ -10,7 +10,7 @@ function base_panel:ctor(...)
 	self.m_base_rootNode = nil
 	self.m_base_tNodeEventHandler = {}
 	self.m_base_tAsyncImage = {}
-	self.m_base_tResTobeReleased = {}
+	self.m_base_tResTobeReleased = {tUi = {}, tAnim = {}, tImg = {}}
 	self.m_base_isClosing = false
 	self.m_base_tComponent = {}
 	self:initBase()
@@ -52,7 +52,9 @@ function base_panel:initByConf(tConf)
 		return
 	end
 
-	self:setRootNode(tConf.rootNode, tConf.isDoLayout)
+	if tConf.rootNode then
+		self:setRootNode(tConf.rootNode, tConf.isDoLayout)
+	end
 
 	if tConf.tMember then
 		self:makeMemberRefs(tConf.tMember)
@@ -79,6 +81,7 @@ function base_panel:setRootNode(resFile, isDoLayout)
 	local rootNode = ui_helper.createWidget(resFile, isDoLayout)
 	self:addChild(rootNode)
 	self.m_base_rootNode = rootNode
+	self:setTobeReleasedRes({resFile})
 end
 
 function base_panel:getRootNode()
@@ -212,6 +215,26 @@ function base_panel:setTobeReleasedRes(tUi, tAnim, tImg)
 
 	if (type(tImg) == "table") then
 		self.m_base_tResTobeReleased.tImg = tImg
+	end
+end
+
+function base_panel:addTobeReleasedRes(tUi, tAnim, tImg)
+	if (type(tUi) == "table") then
+		for k, v in ipairs(tUi) do
+			table.insert(self.m_base_tResTobeReleased.tUi, v)
+		end
+	end
+
+	if (type(tAnim) == "table") then
+		for k, v in ipairs(tAnim) do
+			table.insert(self.m_base_tResTobeReleased.tAnim, v)
+		end
+	end
+
+	if (type(tImg) == "table") then
+		for k, v in ipairs(tImg) do
+			table.insert(self.m_base_tResTobeReleased.tImg, v)
+		end
 	end
 end
 
