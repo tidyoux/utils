@@ -22,6 +22,7 @@ panel_manager.createByConf = function(panelConfPath, ...)
 		end)
 	local p = Panel.new(...)
 	p:setName(tPanelConf.name)
+	safelyCall(tPanelConf.create, p)
 	p:initByConf(tPanelConf)
 	safelyCall(tPanelConf.init, p)
 	return p
