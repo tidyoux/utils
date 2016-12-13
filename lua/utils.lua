@@ -10,6 +10,18 @@ trace_back = function()
     print(debug.traceback("", 2))
 end
 
+join_tostring = function(...)
+	local ret = ""
+	for k, v in ipairs({...}) do
+		if k == 1 then
+			ret = tostring(v)
+		else
+			ret = ret .. " " .. tostring(v)
+		end
+	end
+	return ret
+end
+
 print_err = function(...)
     print("error:", ...)
     trace_back()
@@ -21,6 +33,32 @@ safely_call = function(fn, ...)
     else
         print_err("safely_call", "invalid fn!")
     end
+end
+
+func_list_call = function(tFn, ...)
+	if type(tFn) == "table" then
+		for _, fn in pairs(tFn) do
+			safely_call(fn, ...)
+		end
+	else
+		print_err("func_list_call", "invalid tFn:", tFn)
+	end
+end
+
+-- for mac
+mac_say = function(...)
+	os.execute("say " .. join_tostring(...))
+end
+
+-- for mac
+mac_notify = function(...)
+	local cmd = [[osascript -e 'display notification "]] .. join_tostring(...) .. [[" with title "Note:"']]
+	os.execute(cmd)
+end
+
+-- for mac
+mac_multi_print = function(...)
+	func_list_call({print, mac_notify, mac_say}, ...)
 end
 
 call_with_log = function(fn, fnName)
@@ -37,7 +75,7 @@ table.clone = function(object)
         elseif lookup_table[object] then
             return lookup_table[object]
         end
-        
+
         local new_table = {}
         lookup_table[object] = new_table
         for key, value in pairs(object) do
@@ -86,7 +124,3 @@ string.split = function(input, delimiter)
     table.insert(arr, string.sub(input, pos))
     return arr
 end
-
-
-
-
