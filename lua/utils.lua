@@ -35,6 +35,26 @@ safely_call = function(fn, ...)
     end
 end
 
+--[[
+帮助匿名函数递归调用。
+e.g.
+make_recursion(function(func)
+		return function(n)
+			if n <= 0 then return 1 end
+			return n * func(func)(n - 1)
+		end
+	end)(5)
+==> 120
+--]]
+make_recursion = function(fn)
+	if (type(fn) == "function") then
+        return fn(fn)
+    else
+        print_err("make_recursion", "invalid fn!")
+		return nil
+    end
+end
+
 func_list_call = function(tFn, ...)
 	if type(tFn) == "table" then
 		for _, fn in pairs(tFn) do
