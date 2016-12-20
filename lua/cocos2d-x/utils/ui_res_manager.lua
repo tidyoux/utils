@@ -78,7 +78,7 @@ ui_res_manager.preloadByAllImages = function(tAllImg, onProgress)
     local total = #tAllImg
     if (total > 0) then
         local k = 1
-        function callback()
+        local function callback()
             safelyCall(onProgress, k, total)
 
             k = k + 1
