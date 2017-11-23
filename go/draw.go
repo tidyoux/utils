@@ -1,4 +1,4 @@
-package draw
+package utils
 
 import (
 	"errors"
